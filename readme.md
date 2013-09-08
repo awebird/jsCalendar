@@ -1,3 +1,13 @@
+aweDemo is based on jsCalendar to show a series of dates in different calendars month by month
+
+It's dynamic generated or rendered based on remote JSON date, so there's some modification of jsCalendar.js
+
+Demo
+
+http://www.awebird.com/jsCalendar/aweDemo/
+
+***************
+
 jsCalendar is a lightweight date picker for desktop and mobile browsers.
 
 # Features
