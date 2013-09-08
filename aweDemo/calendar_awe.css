@@ -1,0 +1,45 @@
+/* @group calendar */
+body {font-family: Helvetica, Arial, sans-serif;}
+.hidden {display:none;}
+.noTransition {-webkit-transition:none !important;}
+.calendar {-webkit-user-select:none; max-width:400px; margin:5px 10px 20px; background: #f4f4f4; overflow: hidden; box-shadow: 1px 1px 5px #5c5959; border: solid 1px #5b0000;}
+.calButtonBar {overflow:hidden; -webkit-user-select:none; margin:0 0 10px; padding:0;}
+.calButtonBar li {width:25%; list-style-type:none; float:left; overflow:hidden; text-align:center;}
+.calPrevious a, .calNext a {display:block; width:28px; height:28px; text-decoration:none; color:#666; font-weight:bold; text-align: center;line-height: 28px;}
+.calPrevious a {float:right;}
+.calNext a {float:left;}
+.calButtonBar .calMonth {font-weight:bold; font-size:18px; padding-top:2px; width:100%; color:#666;}
+.calGrid {position:relative;  padding:0 10px 10px;}
+.calGrid table {border-spacing:0; border-collapse:collapse; width:100%;}
+.turnup, .turndown {position:absolute; top:0; left:0; background-color:#fff;}
+.calGrid th {width:14%; height:24px; color:#666;} 
+.calGrid td {width:14%; border:solid 1px #ccc; padding:0;}
+.calGrid td a {display:block; width:100%; height:16px; padding:10px 0; text-align:center; color:#a9a9a9; -webkit-tap-highlight-color:rgba(0,0,0,0); text-decoration:none; transition-property:background-color, color; transition-duration:200ms; -webkit-transition-property:background-color, color; -webkit-transition-duration:200ms; -moz-transition-property:background-color, color; -moz-transition-duration:200ms; text-shadow:1px 1px 1px #fff;font-weight: bold;}
+.calGrid td a.day_available{color:blue;}
+.calGrid td a.day_selected{color:red;}
+/* .calGrid td a.inactive {color:#a9a9a9;} */
+.calGrid td a.today {}
+/* .calGrid td a.startDate, .calGrid td a.endDate {color:#777; background-color:#d2d2d2; } */
+.calGrid td a.betweenDates {background-color:#e1e1e1;}
+.calGrid tr.first td {}
+.calGrid tr.last td {}
+
+/* @group animation */
+.in, .out {-webkit-animation-duration:250ms; -webkit-animation-fill-mode:forwards; -webkit-animation-timing-function:ease-in-out;}
+.in {z-index:10;}
+.out {z-index:0;}
+
+/* @group page turn animation */
+.turnup, .turndown {-webkit-animation-duration:400ms; -webkit-transform-origin: 50% 0%; -webkit-animation-fill-mode:forwards;background:#e5e5e5; margin-left: 10px;}
+.turnup {-webkit-animation-name:turnUp;}
+.turndown {-webkit-animation-name:turnDown;}
+@-webkit-keyframes turnUp {
+	from {-webkit-transform:perspective(800) rotateX(0deg); opacity:1; -webkit-animation-timing-function:ease-in;}
+  50% {-webkit-transform:perspective(800) rotateX(45deg); opacity:1;-webkit-animation-timing-function:linear;}
+  to {-webkit-transform:perspective(800) rotateX(90deg); opacity:0;-webkit-animation-timing-function:ease-out;}
+}
+@-webkit-keyframes turnDown {
+	from {-webkit-transform:perspective(800) rotateX(90deg); opacity:0; -webkit-animation-timing-function:ease-in;}
+  50% {-webkit-transform:perspective(800) rotateX(45deg); opacity:1;-webkit-animation-timing-function:linear;}
+  to {-webkit-transform:perspective(800) rotateX(0deg); opacity:1;-webkit-animation-timing-function:ease-out;}
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>aweCalendar</title>
+<link id="calendarCss" type="text/css" rel="stylesheet" href="calendar_awe.css">
+<style>
+	#all_calenders div{margin-left: auto;margin-right: auto;}
+</style>
+</head>
+<body>
+<div class="wrap">
+	<!-- BEGIN All Calenders -->
+	<div id="all_calenders"></div>
+	<!-- END All Calenders -->
+</div>
+
+<!--日历选择-->
+<script id='calender_tpl' type="text/html">
+	{{#yearMonth}}
+    <div id="{{div_id}}" class="calendar jsCalendar jsSingleDate" data-firstdayofweek="6" data-startdate="{{div_init_date}}" data-localized_date='{"days":{"names":{"min":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]}},"months":{"names":{"long":["01","02","03","04","05","06","07","08","09","10","11","12"]}}}'></div>
+    {{/yearMonth}}
+</script>
+<!--日历选择-->
+
+<script src='jquery-1.8.3.min.js'></script>
+<script src="mustache.js"></script>
+<script src='customModernizr.js'></script>
+<script src='calendar_awe.js'></script>
+<script type="text/javascript">
+function dateHandle(msgs){
+	var yearMonthArr=[];
+	for (var i = 0, maxI = msgs.length; i < maxI; i++) {
+		var dateThis=msgs[i].aweDate;
+		var tmp=dateThis.split("-");
+		var yearMonthThis=tmp[0]+'-'+tmp[1];
+		var dayThis=tmp[2];
+		if($.inArray(yearMonthThis, yearMonthArr)==-1){
+			yearMonthArr.push(yearMonthThis);
+		}
+	}
+
+	DrawCalenders(yearMonthArr);
+
+	for (var i = 0, maxI = msgs.length; i < maxI; i++) {
+		var dateThis=msgs[i].aweDate;
+		var tmp=dateThis.split("-");
+		var yearMonthThis=tmp[0]+'-'+tmp[1];
+		var dayThis=tmp[2];
+		
+		$('div#cal'+yearMonthThis+' a').filter(function () { return $(this).text() == dayThis; }).each(function(){
+			$(this).addClass("day_available");
+			$(this).attr("year_month_day",dateThis);
+		});
+	}
+
+	$(document).on('click','a.day_available',function(event) {
+		$('a.day_selected').removeClass('day_selected');
+		$(this).addClass('day_selected');
+		var yearMonthDayChosen = $(this).attr("year_month_day");
+
+		var msgs_choosen={};
+		msgs_choosen['date']=yearMonthDayChosen;
+		msgs_choosen['msgs']=[];
+		for (var i = 0, maxI = msgs.length; i < maxI; i++) {
+			var dateThis=msgs[i].aweDate;
+			if(dateThis==yearMonthDayChosen){
+				msgs_choosen['msgs'].push(msgs[i]);
+			}
+		}
+		alert(JSON.stringify(msgs_choosen));
+	});
+}
+
+function yearMonthOrder(a,b){
+	if(a==b){
+		return 0;
+	}else{
+		var a_year=Number( a.split('-')[0] );
+		var b_year=Number( b.split('-')[0] );
+
+		if(a_year != b_year){
+			return a_year - b_year;
+		}else{
+			var a_month=Number( a.split('-')[1] );
+			var b_month=Number( b.split('-')[1] );
+			return a_month - b_month;
+		}
+	}
+}
+
+function DrawCalenders(yearMonthArr){
+	yearMonthArr=yearMonthArr.sort(yearMonthOrder);
+
+	var tpl_json={};
+	tpl_json.yearMonth=[];
+	for (var i = 0, maxI = yearMonthArr.length; i < maxI; i++) {
+		tpl_json.yearMonth[i]={"div_id":        "cal"+yearMonthArr[i],
+							   "div_init_date": yearMonthArr[i]+"-01"};
+	}
+	var template = $('#calender_tpl').html();
+	$('#all_calenders').html(Mustache.render(template, tpl_json));
+
+	//调用calendarFreeticket.js启动日历描绘
+	var $calendars = $(".jsCalendar");
+    for (var i = 0, maxI = $calendars.length; i < maxI; i++) {
+    	var calendar = new Calendar();
+    	calendar.ready($calendars.eq(i));
+    }
+}
+
+$(function(){
+	$.ajax({
+		url: 'msg_list.json',
+		dataType: "json",
+		type: "GET",
+		success:function (json){
+			if(json.code=="success"){
+				dateHandle(json.MsgList);
+			}else{
+				console.log('MsgList return null');
+			}
+		}
+	});
+});
+</script>
+</body>
+</html>
