@@ -35,6 +35,10 @@ function dateHandle(msgs){
 	for (var i = 0, maxI = msgs.length; i < maxI; i++) {
 		var dateThis=msgs[i].aweDate;
 		var tmp=dateThis.split("-");
+		var month_pattern = /^([1-9])$/;
+		if(month_pattern.exec(tmp[1])){
+			tmp[1]='0'+tmp[1];
+		}
 		var yearMonthThis=tmp[0]+'-'+tmp[1];
 		var dayThis=tmp[2];
 		if($.inArray(yearMonthThis, yearMonthArr)==-1){
@@ -47,6 +51,10 @@ function dateHandle(msgs){
 	for (var i = 0, maxI = msgs.length; i < maxI; i++) {
 		var dateThis=msgs[i].aweDate;
 		var tmp=dateThis.split("-");
+		var month_pattern = /^([1-9])$/;
+		if(month_pattern.exec(tmp[1])){
+			tmp[1]='0'+tmp[1];
+		}
 		var yearMonthThis=tmp[0]+'-'+tmp[1];
 		var dayThis=tmp[2];
 		
