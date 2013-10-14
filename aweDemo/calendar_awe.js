@@ -156,8 +156,11 @@ function Calendar() {
             today = (new Date()).clearTime();
             minDate = today;
             startDate = $calendar.data("startdate");
-            startDate = startDate ? new Date(startDate).clearTime() : null;
+            //解决iOS5不能正确parseDate
+            startDate_arr=startDate.split(/[- :]/);
+            startDate = startDate ? new Date(startDate_arr[0],startDate_arr[1]-1,startDate_arr[2]).clearTime() : null;
             endDate = $calendar.data("enddate");
+            //endDate_arr=endDate.split(/[- :]/);
             endDate = endDate ? new Date(endDate).clearTime() : null;
             currentMonth = (startDate || today).clone();
             
